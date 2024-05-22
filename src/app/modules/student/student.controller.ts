@@ -32,17 +32,16 @@ const createStudent = async (req: Request, res: Response) => {
     const zodParseData = StudentValidationSchemas.parse(studentData);
 
     const result = await StudentService.createStudentIntoDB(studentData);
-    console.log(result);
 
     res.status(200).json({
       success: true,
       message: "student is create Successfully",
       data: result,
     });
-  } catch (err) {
+  } catch (err: any) {
     res.status(400).json({
       success: false,
-      message: "SomeThing is Rong",
+      message: err.message || "SomeThing is Ron",
       error: err,
     });
   }
@@ -57,8 +56,12 @@ const getStudent = async (req: Request, res: Response) => {
       message: "Get Student Data Successfully",
       data: result,
     });
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    res.status(400).json({
+      success: false,
+      message: "Get Student Data Successfully",
+      data: err,
+    });
   }
 };
 
@@ -72,8 +75,30 @@ const getSingelStudent = async (req: Request, res: Response) => {
       message: "Get Student Data Successfully",
       data: result,
     });
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    res.status(400).json({
+      success: false,
+      message: "Get Student Data Successfully",
+      data: err,
+    });
+  }
+};
+const deletedStudent = async (req: Request, res: Response) => {
+  try {
+    const studentId = req.params.studentId;
+    const result = await StudentService.DeleteSingleStudentFromDB(studentId);
+    console.log(result);
+    res.status(200).json({
+      success: true,
+      message: "Get Student deleted Successfully",
+      data: result,
+    });
+  } catch (err: any) {
+    res.status(400).json({
+      success: false,
+      message: "Get Student Data Successfully",
+      data: err,
+    });
   }
 };
 
@@ -81,4 +106,5 @@ export const StudentController = {
   createStudent,
   getStudent,
   getSingelStudent,
+  deletedStudent,
 };
