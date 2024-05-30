@@ -1,109 +1,40 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import { StudentService } from "./student.services";
 import { StudentValidationSchemas } from "./student.validation";
+import catchAsync from "../../utils/catchAsyc";
 
-const createStudent = async (req: Request, res: Response) => {
-  try {
-    // const joiValidateSchema = Joi.object({
-    //   id: Joi.string(),
-    //   name: {
-    //     firstName: Joi.string().max(20).required(),
-    //     middleName: Joi.string().max(20),
-    //     lastName: Joi.string().max(20),
-    //   },
-    //   gender: Joi.string().required().valid(["male", "female", "other"]),
-    // });
+const getStudent = catchAsync(async (req, res) => {
+  const result = await StudentService.getAllStudentFromDB();
+  console.log(result);
+  res.status(200).json({
+    success: true,
+    message: "Get Student Data Successfully",
+    data: result,
+  });
+});
 
-    const { student: studentData } = req.body;
-
-    //  data validate Using joi
-    // const { error, value } = studentValidateSchema.validate(studentData);
-    // console.log({ error }, { value });
-    // if (error) {
-    //   res.status(400).json({
-    //     success: false,
-    //     message: "SomeThing is Rong",
-    //     error,
-    //   });
-    // }
-
-    // data validate Using joz
-
-    const zodParseData = StudentValidationSchemas.parse(studentData);
-
-    const result = await StudentService.createStudentIntoDB(studentData);
-
-    res.status(200).json({
-      success: true,
-      message: "student is create Successfully",
-      data: result,
-    });
-  } catch (err: any) {
-    res.status(400).json({
-      success: false,
-      message: err.message || "SomeThing is Ron",
-      error: err,
-    });
-  }
-};
-
-const getStudent = async (req: Request, res: Response) => {
-  try {
-    const result = await StudentService.getAllStudentFromDB();
-    console.log(result);
-    res.status(200).json({
-      success: true,
-      message: "Get Student Data Successfully",
-      data: result,
-    });
-  } catch (err: any) {
-    res.status(400).json({
-      success: false,
-      message: "Get Student Data Successfully",
-      data: err,
-    });
-  }
-};
-
-const getSingelStudent = async (req: Request, res: Response) => {
-  try {
-    const studentId = req.params.studentId;
-    const result = await StudentService.getSingleStudentFromDB(studentId);
-    console.log(result);
-    res.status(200).json({
-      success: true,
-      message: "Get Student Data Successfully",
-      data: result,
-    });
-  } catch (err: any) {
-    res.status(400).json({
-      success: false,
-      message: "Get Student Data Successfully",
-      data: err,
-    });
-  }
-};
-const deletedStudent = async (req: Request, res: Response) => {
-  try {
-    const studentId = req.params.studentId;
-    const result = await StudentService.DeleteSingleStudentFromDB(studentId);
-    console.log(result);
-    res.status(200).json({
-      success: true,
-      message: "Get Student deleted Successfully",
-      data: result,
-    });
-  } catch (err: any) {
-    res.status(400).json({
-      success: false,
-      message: "Get Student Data Successfully",
-      data: err,
-    });
-  }
-};
+const getSingelStudent = catchAsync(async (req, res) => {
+  const studentId = req.params.studentId;
+  const result = await StudentService.getSingleStudentFromDB(studentId);
+  console.log(result);
+  res.status(200).json({
+    success: true,
+    message: "Get Student Data Successfully",
+    data: result,
+  });
+});
+const deletedStudent: RequestHandler = catchAsync(async (req, res) => {
+  const studentId = req.params.studentId;
+  const result = await StudentService.DeleteSingleStudentFromDB(studentId);
+  console.log(result);
+  res.status(200).json({
+    success: true,
+    message: "Get Student deleted Successfully",
+    data: result,
+  });
+});
 
 export const StudentController = {
-  createStudent,
   getStudent,
   getSingelStudent,
   deletedStudent,

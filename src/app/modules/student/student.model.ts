@@ -1,14 +1,13 @@
 import { Schema, model } from "mongoose";
-import config from "../config/index";
 import {
   StudentModel,
   TGuardian,
   TLocalGuardian,
   TName,
   TStudent,
-} from "./student/student.interface";
+} from "./student.interface";
 import validator from "validator";
-import bcrypt from "bcrypt";
+
 import { get } from "http";
 
 const userNameSchema = new Schema<TName>({
@@ -67,9 +66,11 @@ const userLocalGuardianSchema = new Schema<TLocalGuardian>({
 const studentSchema = new Schema<TStudent, StudentModel>(
   {
     id: { type: String, required: [true, "ID is required"], unique: true },
-    password: {
-      type: String,
-      required: [true, "password is required"],
+    user: {
+      type: Schema.Types.ObjectId,
+      required: [true, "UserID is required"],
+      unique: true,
+      ref: "User",
     },
     name: { type: userNameSchema, required: true },
     gender: {
@@ -117,11 +118,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, "Local guardian information is required"],
     },
     profileImg: { type: String },
-    isActive: {
-      type: String,
-      enum: ["active", "blocked"],
-      default: "active",
-    },
+
     isDeleted: {
       type: Boolean,
       default: false,
@@ -145,24 +142,6 @@ studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await Student.findOne({ id });
   return existingUser;
 };
-
-// middelware : we work on create() save()
-
-studentSchema.pre("save", async function (next) {
-  // console.log(this, " pre hook : we will save data");
-  const user = this;
-  user.password = await bcrypt.hash(
-    this.password,
-    Number(config.BCRYT_SALT_ROUND)
-  );
-  next();
-});
-
-studentSchema.post("save", function (doc, next) {
-  // console.log(this, " post hook : we  saved our data");
-  doc.password = "";
-  next();
-});
 
 // qurey middelware
 
