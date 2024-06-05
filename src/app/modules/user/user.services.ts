@@ -1,4 +1,3 @@
-import { object } from "joi";
 import config from "../../config";
 import { TStudent } from "../student/student.interface";
 import { TUser } from "./user.interface";

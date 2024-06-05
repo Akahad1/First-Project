@@ -2,47 +2,41 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import { userServices } from "./user.services";
 import { sendResponse } from "../../utils/sendRespones";
 import httpStatus from "http-status";
+import catchAsync from "../../utils/catchAsyc";
 
-const createStudent: RequestHandler = async (req, res, next) => {
-  try {
-    const { password, student: studentData } = req.body;
+const createStudent = catchAsync(async (req, res, next) => {
+  const { password, student: studentData } = req.body;
 
-    //  data validate Using joi
-    // const { error, value } = studentValidateSchema.validate(studentData);
-    // console.log({ error }, { value });
-    // if (error) {
-    //   res.status(400).json({
-    //     success: false,
-    //     message: "SomeThing is Rong",
-    //     error,
-    //   });
-    // }
+  //  data validate Using joi
+  // const { error, value } = studentValidateSchema.validate(studentData);
+  // console.log({ error }, { value });
+  // if (error) {
+  //   res.status(400).json({
+  //     success: false,
+  //     message: "SomeThing is Rong",
+  //     error,
+  //   });
+  // }
 
-    // data validate Using joz
+  // data validate Using joz
 
-    // const zodParseData = StudentValidationSchemas.parse(studentData);
+  // const zodParseData = StudentValidationSchemas.parse(studentData);
 
-    const result = await userServices.createStudentIntoDB(
-      password,
-      studentData
-    );
+  const result = await userServices.createStudentIntoDB(password, studentData);
 
-    // res.status(200).json({
-    //   success: true,
-    //   message: "student is create Successfully",
-    //   data: result,
-    // });
+  // res.status(200).json({
+  //   success: true,
+  //   message: "student is create Successfully",
+  //   data: result,
+  // });
 
-    sendResponse(res, {
-      satatusCode: httpStatus.OK,
-      success: true,
-      mesages: "student is create Successfully",
-      data: result,
-    });
-  } catch (err: any) {
-    next(err);
-  }
-};
+  sendResponse(res, {
+    satatusCode: httpStatus.OK,
+    success: true,
+    mesages: "student is create Successfully",
+    data: result,
+  });
+});
 
 export const userController = {
   createStudent,

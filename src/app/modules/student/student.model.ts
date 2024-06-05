@@ -81,7 +81,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       },
       required: [true, "Gender is required"],
     },
-    dateOfBirth: { type: String },
+    dateOfBirth: { type: Date },
     contactNo: { type: String, required: [true, "Contact number is required"] },
     emargencyNo: {
       type: String,
@@ -118,11 +118,6 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, "Local guardian information is required"],
     },
     profileImg: { type: String },
-
-    isDeleted: {
-      type: Boolean,
-      default: false,
-    },
   },
   {
     toJSON: {
