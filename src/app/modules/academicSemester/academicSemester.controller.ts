@@ -1,5 +1,3 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
-
 import { sendResponse } from "../../utils/sendRespones";
 import httpStatus from "http-status";
 import catchAsync from "../../utils/catchAsyc";

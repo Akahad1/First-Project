@@ -65,7 +65,7 @@ const userLocalGuardianSchema = new Schema<TLocalGuardian>({
 
 const studentSchema = new Schema<TStudent, StudentModel>(
   {
-    id: { type: String, required: [true, "ID is required"], unique: true },
+    id: { type: String, required: [true, "ID is required"] },
     user: {
       type: Schema.Types.ObjectId,
       required: [true, "UserID is required"],
@@ -95,6 +95,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     email: {
       type: String,
       required: [true, "Email is required"],
+      unique: true,
       validate: {
         validator: (value: string) => validator.isEmail(value),
         message: "{VALUE} is not valid",
@@ -118,6 +119,10 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       required: [true, "Local guardian information is required"],
     },
     profileImg: { type: String },
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      ref: "AcademicSemester",
+    },
   },
   {
     toJSON: {

@@ -3,8 +3,11 @@ import { TStudent } from "../student/student.interface";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
 import { Student } from "../student/student.model";
+import { AcademicSemester } from "../academicSemester/academicSemester.Model";
+import { genareateStudenId } from "./user.utils";
+import { NullExpression } from "mongoose";
 
-const createStudentIntoDB = async (password: string, studentData: TStudent) => {
+const createStudentIntoDB = async (password: string, palyload: TStudent) => {
   // const student = new Student(studentData);
 
   //   if (await student.isUserExits(studentData.id)) {
@@ -25,17 +28,21 @@ const createStudentIntoDB = async (password: string, studentData: TStudent) => {
   // set role
 
   userData.role = "student";
+  //  your semster code 4 digit number
 
   //   set manulay id
 
-  userData.id = "202410003";
+  const admissionSemester: any = await AcademicSemester.findById(
+    palyload.admissionSemester
+  );
+  userData.id = await genareateStudenId(admissionSemester);
 
   const NewUser = await User.create(userData);
   if (Object.keys(NewUser).length) {
-    studentData.id = NewUser.id;
-    studentData.user = NewUser._id;
+    palyload.id = NewUser.id;
+    palyload.user = NewUser._id;
 
-    const newStudent = await Student.create(studentData);
+    const newStudent = await Student.create(palyload);
     return newStudent;
   }
 };
