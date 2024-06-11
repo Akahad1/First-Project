@@ -14,12 +14,12 @@ const createAcademicDepertmentIntoDB = async (
   return result;
 };
 const getAllAcademicDepertmentFromDB = async () => {
-  const result = await AcademicDepertment.find();
+  const result = await AcademicDepertment.find().populate("academicFaculty");
   return result;
 };
 
 const getSingleAcademicDepertmentFromDB = async (id: string) => {
-  const result = await AcademicDepertment.findOne({ id });
+  const result = await AcademicDepertment.findOne({ _id: id });
   return result;
 };
 const DeleteSingleAcademicDepertmentFromDB = async (id: string) => {

@@ -6,7 +6,7 @@ export const globalErrorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  let statusCode = 500;
+  let statusCode = err.statusCode || 500;
   let megssage = err.megssage || "something is wrong!";
   res.status(statusCode).json({
     success: false,

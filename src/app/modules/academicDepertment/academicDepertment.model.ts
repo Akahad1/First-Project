@@ -1,5 +1,6 @@
 import { Schema, Types, model } from "mongoose";
 import { TAcademicDepertment } from "./academicDepertment.interface";
+import { AppError } from "../../error/AppError";
 
 const academicDepertmentSchema = new Schema<TAcademicDepertment>(
   {
@@ -29,7 +30,7 @@ export const AcademicDepertment = model<TAcademicDepertment>(
 //     qurey,
 //   });
 //   if (!departmentIsExist) {
-//     throw new Error("this deparment is does not exist");
+//     throw new AppError(404, "this deparment is does not exist");
 //   }
 //   next();
 // });
