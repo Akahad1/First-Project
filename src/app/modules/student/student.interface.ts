@@ -39,6 +39,10 @@ export type TStudent = {
   admissionSemester: Types.ObjectId;
   admissionDepartment: Types.ObjectId;
   profileImg?: string;
+  isDeleted: {
+    type: Boolean;
+    default: false;
+  };
 };
 
 // for create in instance

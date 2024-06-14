@@ -4,7 +4,7 @@ import catchAsync from "../../utils/catchAsyc";
 
 const getStudent = catchAsync(async (req, res) => {
   const result = await StudentService.getAllStudentFromDB();
-  console.log(result);
+
   res.status(200).json({
     success: true,
     message: "Get Student Data Successfully",
@@ -15,7 +15,7 @@ const getStudent = catchAsync(async (req, res) => {
 const getSingelStudent = catchAsync(async (req, res) => {
   const studentId = req.params.studentId;
   const result = await StudentService.getSingleStudentFromDB(studentId);
-  console.log(result);
+
   res.status(200).json({
     success: true,
     message: "Get Student Data Successfully",
@@ -25,10 +25,21 @@ const getSingelStudent = catchAsync(async (req, res) => {
 const deletedStudent: RequestHandler = catchAsync(async (req, res) => {
   const studentId = req.params.studentId;
   const result = await StudentService.DeleteSingleStudentFromDB(studentId);
-  console.log(result);
+
   res.status(200).json({
     success: true,
     message: "Get Student deleted Successfully",
+    data: result,
+  });
+});
+const updateStudent: RequestHandler = catchAsync(async (req, res) => {
+  const studentId = req.params.studentId;
+  const { student } = req.body;
+  const result = await StudentService.updateStudentFromDB(studentId, student);
+
+  res.status(200).json({
+    success: true,
+    message: "Get Student upadete Successfully",
     data: result,
   });
 });
@@ -37,4 +48,5 @@ export const StudentController = {
   getStudent,
   getSingelStudent,
   deletedStudent,
+  updateStudent,
 };

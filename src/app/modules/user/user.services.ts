@@ -63,6 +63,7 @@ const createStudentIntoDB = async (password: string, palyload: TStudent) => {
   } catch (err) {
     await session.abortTransaction();
     await session.endSession();
+    throw new Error("failed to crated user");
   }
 };
 

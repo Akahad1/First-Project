@@ -50,7 +50,56 @@ const createStudentValidationSchema = z.object({
   }),
 });
 
+const upadeteNameValidationSchema = z.object({
+  firstName: z.string().optional(),
+  middleName: z.string().optional(),
+  lastName: z.string().optional(),
+});
+
+// Zod Schema for Guardian
+const updateGuardianValidationSchema = z.object({
+  fatherName: z.string().optional(),
+  fatherOccupation: z.string().optional(),
+  fatherContactNo: z.string().optional(),
+  motherName: z.string().optional(),
+  motherOccupation: z.string().optional(),
+  motherContactNo: z.string().optional(),
+});
+
+// Zod Schema for Local Guardian
+const updateLocalGuardianValidationSchema = z.object({
+  name: z.string().optional(),
+  occupation: z.string().optional(),
+  contactNo: z.string().optional(),
+  address: z.string().optional(),
+});
+
+// Zod Schema for Student
+const upadeteStudentValidationSchema = z.object({
+  body: z.object({
+    student: z.object({
+      name: upadeteNameValidationSchema,
+      gender: z.enum(["male", "female", "other"]).optional(),
+      dateOfBirth: z.string().optional(),
+      contactNo: z.string().optional(),
+      emargencyNo: z.string().optional(),
+      BloodGroup: z
+        .enum(["A+", "A-", "AB+", "B+", "B-", "O-", "O+"])
+        .optional(),
+      email: z.string().email("Email is not valid").optional(),
+      presentAddress: z.string().optional(),
+      permanetAddress: z.string().optional(),
+      guardian: updateGuardianValidationSchema,
+      localGuardian: updateLocalGuardianValidationSchema,
+      admissionSemester: z.string().optional(),
+      admissionDepartment: z.string().optional(),
+      profileImg: z.string().optional(),
+    }),
+  }),
+});
+
 // Export the Zod schema
 export const StudentValidation = {
   createStudentValidationSchema,
+  upadeteStudentValidationSchema,
 };
