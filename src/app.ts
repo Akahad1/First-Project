@@ -1,12 +1,12 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
 
 import { userRoute } from "./app/modules/user/user.route";
-import { globalErrorHandler } from "./app/middleware/globalErrorHandler";
 import { notFound } from "./app/middleware/notFound";
 import router from "./app/route";
+import globalErrorHandler from "./app/middleware/globalErrorHandler";
 
-const app = express();
+const app: Application = express();
 
 // parse
 

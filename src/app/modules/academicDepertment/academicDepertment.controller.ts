@@ -4,7 +4,7 @@ import httpStatus from "http-status";
 import { AcademicDepertmentService } from "./academicDepertment.services";
 import catchAsync from "../../utils/catchAsyc";
 
-const createAcademicDepertment = catchAsync(async (req, res, next) => {
+const createAcademicDepertment = catchAsync(async (req, res) => {
   const result = await AcademicDepertmentService.createAcademicDepertmentIntoDB(
     req.body
   );
@@ -12,12 +12,12 @@ const createAcademicDepertment = catchAsync(async (req, res, next) => {
   sendResponse(res, {
     satatusCode: httpStatus.OK,
     success: true,
-    mesages: "AcademicSemester is create Successfully",
+    mesages: "Academic department is created succesfully",
     data: result,
   });
 });
 
-const getAcademicDepertmentSemester = catchAsync(async (req, res, next) => {
+const getAcademicDepertmentSemester = catchAsync(async (req, res) => {
   const result =
     await AcademicDepertmentService.getAllAcademicDepertmentFromDB();
   sendResponse(res, {
