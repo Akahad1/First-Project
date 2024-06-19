@@ -1,4 +1,10 @@
-import express, { Application, NextFunction, Request, Response } from "express";
+import express, {
+  Application,
+  NextFunction,
+  Request,
+  Response,
+  response,
+} from "express";
 import cors from "cors";
 
 import { userRoute } from "./app/modules/user/user.route";
@@ -14,6 +20,10 @@ app.use(express.json());
 app.use(cors());
 
 // applicatinon route
+const test = async (req: Request, res: Response) => {
+  // Promise.reject();
+};
+// app.use("/", test);
 
 app.use("/api/v1", router);
 

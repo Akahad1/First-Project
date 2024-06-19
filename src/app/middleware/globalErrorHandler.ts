@@ -5,6 +5,8 @@ import handleZodError from "../error/handdeZodError";
 import handleValidationError from "../error/handelValidationError";
 import { TErrorSources } from "../interface/error";
 import handleCastError from "../error/handleCastError";
+import handleDubticatError from "../error/handleDubticatError";
+import { AppError } from "../error/AppError";
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   //setting default values
@@ -35,6 +37,20 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = simplifiedError.statusCode;
     message = simplifiedError?.megssage;
     errorSources = simplifiedError?.errorSource;
+  } else if (err?.code === 11000) {
+    const simplifiedError = handleDubticatError(err);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError?.megssage;
+    errorSources = simplifiedError?.errorSource;
+  } else if (err instanceof AppError) {
+    statusCode = err?.statusCode;
+    message = err?.message;
+    errorSources = [
+      {
+        path: "",
+        message: err?.message,
+      },
+    ];
   }
 
   //ultimate return

@@ -4,16 +4,89 @@ import { AppError } from "../../error/AppError";
 import httpStatus from "http-status";
 import { User } from "../user/user.model";
 import { TStudent } from "./student.interface";
+import { optional } from "joi";
+import QureyBuilder from "../../builder/qureyBuilder";
+import { searchAbleFields } from "./student.const";
 
-const getAllStudentFromDB = async () => {
-  const result = await Student.find()
-    .populate("admissionSemester")
-    .populate({
-      path: "admissionDepartment",
-      populate: {
-        path: "academicFaculty",
-      },
-    });
+const getAllStudentFromDB = async (query: Record<string, unknown>) => {
+  // let searchTerm = "";
+
+  // const qurObj = { ...query };
+
+  // if (query?.searchTerm) {
+  //   searchTerm = query?.searchTerm as string;
+  // }
+
+  // const searchQurey = Student.find({
+  //   $or: ["email", "name.firstName", "presentAddress"].map((field) => ({
+  //     [field]: { $regex: searchTerm, $options: "i" },
+  //   })),
+  // });
+
+  // const excludeFields = ["searchTerm", "sort", "limit", "page", "fields"];
+  // excludeFields.forEach((el) => delete qurObj[el]);
+
+  // console.log(qurObj);
+
+  // const filterQurey = searchQurey
+  //   .find(qurObj)
+  // .populate("admissionSemester")
+  // .populate({
+  //   path: "admissionDepartment",
+  //   populate: {
+  //     path: "academicFaculty",
+  //   },
+  // });
+
+  // let sort = "-createdAt";
+  // let page = 1;
+  // let skip = 0;
+  // let limit = 1;
+  // if (query?.limit) {
+  //   limit = Number(query?.limit);
+  // }
+  // if (query?.page) {
+  //   page = Number(query?.page);
+  //   skip = (page - 1) * limit;
+  // }
+
+  // if (query?.sort) {
+  //   sort = query?.sort as string;
+  // }
+
+  // const sortQuery = filterQurey.sort(sort);
+  // const paginationQurey = sortQuery.skip(skip);
+
+  // const limitQurey = paginationQurey.limit(limit);
+
+  // let fields = "-__v";
+
+  // if (query?.fields) {
+  //   fields = (query?.fields as string).split(",").join(" ");
+  //   console.log({ fields });
+  // }
+
+  // const fieldQuery = await limitQurey.select(fields);
+
+  // return fieldQuery;
+
+  const studentQurey = new QureyBuilder(
+    Student.find()
+      .populate("admissionSemester")
+      .populate({
+        path: "admissionDepartment",
+        populate: {
+          path: "academicFaculty",
+        },
+      }),
+    query
+  )
+    .search(searchAbleFields)
+    .filter()
+    .sort()
+    .paginaet()
+    .fields();
+  const result = await studentQurey.modelQurey;
   return result;
 };
 

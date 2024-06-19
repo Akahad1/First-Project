@@ -1,13 +1,16 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import { StudentService } from "./student.services";
 import catchAsync from "../../utils/catchAsyc";
+import { sendResponse } from "../../utils/sendRespones";
+import httpStatus from "http-status";
 
 const getStudent = catchAsync(async (req, res) => {
-  const result = await StudentService.getAllStudentFromDB();
+  const result = await StudentService.getAllStudentFromDB(req.query);
 
-  res.status(200).json({
+  sendResponse(res, {
+    satatusCode: httpStatus.OK,
     success: true,
-    message: "Get Student Data Successfully",
+    mesages: "get Student is  succesfully",
     data: result,
   });
 });
@@ -16,9 +19,10 @@ const getSingelStudent = catchAsync(async (req, res) => {
   const studentId = req.params.studentId;
   const result = await StudentService.getSingleStudentFromDB(studentId);
 
-  res.status(200).json({
+  sendResponse(res, {
+    satatusCode: httpStatus.OK,
     success: true,
-    message: "Get Student Data Successfully",
+    mesages: "Student is retrieved succesfully",
     data: result,
   });
 });
@@ -26,9 +30,10 @@ const deletedStudent: RequestHandler = catchAsync(async (req, res) => {
   const studentId = req.params.studentId;
   const result = await StudentService.DeleteSingleStudentFromDB(studentId);
 
-  res.status(200).json({
+  sendResponse(res, {
+    satatusCode: httpStatus.OK,
     success: true,
-    message: "Get Student deleted Successfully",
+    mesages: "Get Student deleted Successfully",
     data: result,
   });
 });

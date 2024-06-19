@@ -169,7 +169,7 @@ studentSchema.pre("aggregate", function (next) {
 // vartul
 
 studentSchema.virtual("fullname").get(function () {
-  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
+  return `${this.name?.firstName} ${this.name?.middleName} ${this.name?.lastName}`;
 });
 
 export const Student = model<TStudent, StudentModel>("Student", studentSchema);
