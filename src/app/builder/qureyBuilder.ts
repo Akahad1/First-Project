@@ -41,7 +41,7 @@ class QureyBuilder<T> {
   }
   paginaet() {
     let page = Number(this.qurey.page) || 1;
-    let limit = Number(this.qurey.limit) || 1;
+    let limit = Number(this.qurey.limit) || 0;
     let skip = (page - 1) * limit;
 
     this.modelQurey = this.modelQurey.skip(skip).limit(limit);
