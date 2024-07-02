@@ -6,12 +6,16 @@ import { AcademicSemester } from "../academicSemester/academicSemester.Model";
 import { AppError } from "../../error/AppError";
 import { SemesterRegistration } from "./semesterRegistration.model";
 import QureyBuilder from "../../builder/qureyBuilder";
+import { RegistrationStatus } from "./semesterRegistration.constant";
 
 const createSemesterRegistrationIntoDB = async (
   payload: TSemesterRegistration
 ) => {
   const isThereOngoingandUpcoming = await SemesterRegistration.findOne({
-    $or: [{ status: "ONGOING" }, { status: "UPCOMING" }],
+    $or: [
+      { status: RegistrationStatus.ONGOING },
+      { status: RegistrationStatus.UPCOMING },
+    ],
   });
   if (isThereOngoingandUpcoming) {
     throw new AppError(
@@ -83,10 +87,36 @@ const updateSemesterRegistrationIntoDB = async (
     throw new AppError(httpStatus.NOT_FOUND, "This  Semester is not Found");
   }
   //If the requested semester registration is ended, we will not update anything
-  const requestedSemesterStatus = isSemesterReisterExist.status;
-  if (requestedSemesterStatus === "ENDED") {
+  const currentSemesterStatus = isSemesterReisterExist.status;
+  if (currentSemesterStatus === RegistrationStatus.ENDED) {
     throw new AppError(httpStatus.BAD_REQUEST, "This SemsterREfistrarin END");
   }
+  const requestedStatus = payload?.status;
+  if (
+    currentSemesterStatus === RegistrationStatus.UPCOMING &&
+    requestedStatus === RegistrationStatus.ENDED
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `You can not direacly upadate ${currentSemesterStatus} to ${requestedStatus}`
+    );
+  }
+  if (
+    currentSemesterStatus === RegistrationStatus.ONGOING &&
+    requestedStatus === RegistrationStatus.UPCOMING
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `You can not direacly upadate ${currentSemesterStatus} to ${requestedStatus}`
+    );
+  }
+
+  const result = await SemesterRegistration.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return result;
 };
 
 const deleteSemesterRegistrationFromDB = async (id: string) => {
