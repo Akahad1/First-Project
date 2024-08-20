@@ -5,6 +5,7 @@ import { offeredCourseRoutes } from "../modules/OfferedCourse/OfferedCourse.rout
 import { academicDepertmentRoute } from "../modules/academicDepertment/academicDepertment.route";
 import { academicFacultyRoute } from "../modules/academicFaculty/academicFaculty.route";
 import { academicSemesterRoute } from "../modules/academicSemester/academicSemster.route";
+import { authRouter } from "../modules/auth/auth.route";
 import { semesterRegistrationRoutes } from "../modules/semesterRegistration/semesterRegistration.route";
 import { studentRoute } from "../modules/student/student.router";
 import { userRoute } from "../modules/user/user.route";
@@ -40,6 +41,10 @@ const modulesRoute = [
   {
     path: "/offeredCourese",
     route: offeredCourseRoutes,
+  },
+  {
+    path: "/auth",
+    route: authRouter,
   },
 ];
 
