@@ -9,4 +9,5 @@ export default {
   database: process.env.DATABASE,
   BCRYT_SALT_ROUND: process.env.BCRYT_SALT_ROUND,
   default_password: process.env.DEFULT_PASSWORLD,
+  JWT_ACCEESS_SECRET: process.env.JWT_ACCEESS_SECRET,
 };

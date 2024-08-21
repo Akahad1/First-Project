@@ -5,6 +5,8 @@ import { CourseValidations } from "./course.validation";
 import validateRequest from "../../middleware/validationRequiest";
 import { userController } from "../user/user.contoller";
 import { updateFacultyValidationSchema } from "../Faculty/faculty.validation";
+import auth from "../../middleware/auth";
+import { USER_ROLE } from "../user/user.constaint";
 
 const router = express.Router();
 
@@ -50,6 +52,6 @@ router.delete("/:id", CourseControllers.deleteCourse);
 //   CourseControllers.removeFacultiesFromCourse,
 // );
 
-router.get("/", CourseControllers.getAllCourses);
+router.get("/", auth(USER_ROLE.admin), CourseControllers.getAllCourses);
 
 export const CourseRoutes = router;
