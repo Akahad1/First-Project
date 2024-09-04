@@ -13,6 +13,11 @@ router.post(
   authController.logInUser
 );
 router.post(
+  "/refrahToken",
+  validateRequest(AuthValidation.refreshTokenValidationSchema),
+  authController.refreshToken
+);
+router.post(
   "/change-password",
   validateRequest(AuthValidation.changePasswordValidationSchema),
   auth(USER_ROLE.admin, USER_ROLE.student, USER_ROLE.faculty),

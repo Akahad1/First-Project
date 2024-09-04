@@ -2,6 +2,7 @@ import { Schema, model } from "mongoose";
 import { TUser, UserModel } from "./user.interface";
 import config from "../../config";
 import bcrypt from "bcrypt";
+import { clearScreenDown } from "readline";
 
 const userSchema = new Schema<TUser, UserModel>(
   {
@@ -66,5 +67,12 @@ userSchema.statics.isPasswordMatched = async function (
   hashPassword
 ) {
   return await bcrypt.compare(plineTextPassword, hashPassword);
+};
+userSchema.statics.isJwtIssuedBeforewordChangePassword = async function (
+  passwordChangeTimeStap: Date,
+  jwtIssuedTimeStamp: number
+) {
+  const passwordChangeTime = new Date(passwordChangeTimeStap).getTime() / 1000;
+  return passwordChangeTime > jwtIssuedTimeStamp;
 };
 export const User = model<TUser, UserModel>("User", userSchema);

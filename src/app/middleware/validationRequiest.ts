@@ -8,6 +8,7 @@ const validateRequest = (schma: AnyZodObject) => {
     // if all right data the next()
     await schma.parseAsync({
       body: req.body,
+      cookies: req.cookies,
     });
     next();
   });
